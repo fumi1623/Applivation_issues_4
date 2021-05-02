@@ -1,0 +1,49 @@
+<p id="notice"></p>
+<div class="container px-5 px-sm-8">
+  <div class="row">
+    <%= render 'users/sideBar', users: @users %>
+    <div class="col-md-8 offset-md-1">
+      <h2>Users</h2>
+      <table class="table table-hover table-inverse">
+
+        <thead>
+          <tr>
+            <th>image</th>
+            <th>name</th>
+            <th colspan="3"></th>
+          </tr>
+        </thead>
+
+        <% @users.each do |user| %>
+        <tbody>
+          <tr>
+            <td>
+              <%= attachment_image_tag user, :profile_image, :fill, 40, 40, format: 'jpeg', fallback: "no_image.jpg", size:'40x40' %>
+            </td>
+            <td>
+              <%= user.name %>
+            </td>
+
+            <td><p>フォロー数:<%= user.followings.count %></p></td>
+						<td><p>フォロワー数:<%= user.followers.count %></p></td>
+
+            <td>
+							<% if current_user != user %>
+								<% if user.followed_by?(current_user) %>
+									<p><%= link_to "フォローを外す", user_relationships_path(user.id), method: :delete %></p>
+								<% else %>
+									<p><%= link_to "フォローする", user_relationships_path(user.id), method: :post %></p>
+								<% end %>
+							<% end %>
+            </td>
+            <td>
+              <%= link_to "Show", user_path(user) %>
+            </td>
+          </tr>
+        </tbody>
+        <% end %>
+
+      </table>
+    </div>
+  </div>
+</div>
